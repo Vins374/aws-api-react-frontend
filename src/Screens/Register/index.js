@@ -7,25 +7,82 @@ import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import classes from './classes';
 import {withStyles} from '@material-ui/core';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import AppHeader from './../../Components/AppHeader';
 
 class Index extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            first_name:'',
+            last_name:'',
+            address:'',
+            mobile:'',
+            email:'',
+            password:'',
+        };
+
+        this.onChange = this.onChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        
+        // console.log(userData);
+    }
+
+    onChange(e) {
+        this.setState({[e.target.name]: e.target.value});
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+
+        let payload = { email: this.state.email, password: this.state.password, first_name : this.state.first_name, last_name: this.state.last_name, address: this.state.address, mobile: this.state.mobile };
+        console.log(payload);
+        let url = "https://hy9jdgi255.execute-api.ap-south-1.amazonaws.com/dev/user";
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json',
+                'accept': 'application/json',
+                'operation':'register',
+                'Access-Control-Allow-Origin' : '*',
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(res =>res.json())
+        .then(data => {
+            toast(data.message);
+            if(data.status == true) {
+                this.setState({first_name:'',last_name:'',address:'',mobile:'',email:'',password:''})
+            }
+        })
+        .catch(function() {
+            
+        });
+
+    }
+
     gotoLoginScreen() {
         this.props.history.push('/');
+
+        // let userData = localStorage.getItem('userData');
     }
 
   
     render() {
         return (
             <Fragment>
-            <AppHeader name="Register"/>
+            <AppHeader name={'Welcome Home - '+this.state.first_name}/>
             <Container component="main" maxWidth="xs">
+
+            <ToastContainer position={toast.POSITION.BOTTOM_RIGHT} />
 
             <CssBaseline />
             <div className={classes.paper}>
-                <form className={classes.form} noValidate>
+                <form className={classes.form} noValidate onSubmit={this.handleSubmit}>
                 <TextField
                     variant="outlined"
                     margin="normal"
@@ -34,6 +91,8 @@ class Index extends Component {
                     id="first_name"
                     label="Firstname"
                     name="first_name"
+                    onChange={this.onChange} 
+                    value={this.state.first_name}
                     autoFocus
                 />
 
@@ -45,6 +104,8 @@ class Index extends Component {
                     id="last_name"
                     label="Lastname"
                     name="last_name"
+                    onChange={this.onChange} 
+                    value={this.state.last_name}
                 />
 
                 <TextField
@@ -55,6 +116,8 @@ class Index extends Component {
                     id="address"
                     label="Address"
                     name="address"
+                    onChange={this.onChange} 
+                    value={this.state.address}
                 />
 
                 <TextField
@@ -65,6 +128,8 @@ class Index extends Component {
                     id="mobile"
                     label="Mobile"
                     name="mobile"
+                    onChange={this.onChange} 
+                    value={this.state.mobile}
                 />
 
                 <TextField
@@ -73,9 +138,10 @@ class Index extends Component {
                     required
                     fullWidth
                     id="email"
-                    label="Email Address"
+                    label="Email"
                     name="email"
-                    autoComplete="email"
+                    onChange={this.onChange} 
+                    value={this.state.email}
                 />
 
                 <TextField
@@ -83,12 +149,14 @@ class Index extends Component {
                     margin="normal"
                     required
                     fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
                     id="password"
-                    autoComplete="current-password"
+                    label="Password"
+                    name="password"
+                    onChange={this.onChange} 
+                    value={this.state.password}
                 />
+
+                
                 {/* <FormControlLabel
                     control={<Checkbox value="remember" color="primary" />}
                     label="Remember me"
@@ -110,7 +178,7 @@ class Index extends Component {
                     </Grid> */}
                     <Grid item>
                     <Link onClick={ () => { this.gotoLoginScreen() }} variant="body2">
-                        {"Already have account? click here to login"}
+                        {" Already have account? click here to login "}
                     </Link>
                     </Grid>
                 </Grid>

@@ -16,28 +16,33 @@ class Index extends Component {
 
     constructor(props) {
         super(props);
+
+        let userData = localStorage.getItem('userData');
+        userData = JSON.parse(userData);
+
+
         this.state = {
-            email:'',
-            password:''
+            id: userData.id,
+            first_name:userData.first_name,
+            last_name:userData.last_name,
+            address:userData.address,
+            mobile:userData.mobile
         };
 
         this.onChange = this.onChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        
+        // console.log(userData);
     }
 
     onChange(e) {
         this.setState({[e.target.name]: e.target.value});
     }
 
-    gotoRegisterScreen() {
-        this.props.history.push('/register');
-    }
-
     handleSubmit(event) {
         event.preventDefault();
-        console.log("submit");
-        console.log(this.state);
-        let payload = { email : this.state.email, password: this.state.password };
+
+        let payload = { id: this.state.id, first_name : this.state.first_name, last_name: this.state.last_name, address: this.state.address, mobile: this.state.mobile };
         console.log(payload);
         let url = "https://hy9jdgi255.execute-api.ap-south-1.amazonaws.com/dev/user";
         fetch(url, {
@@ -45,7 +50,7 @@ class Index extends Component {
             headers: {
                 'content-type': 'application/json',
                 'accept': 'application/json',
-                'operation':'login',
+                'operation':'update',
                 'Access-Control-Allow-Origin' : '*',
             },
             body: JSON.stringify(payload)
@@ -54,23 +59,24 @@ class Index extends Component {
         .then(data => {
             toast(data.message);
             console.log(data);
-            if(data.status == true) {
-                localStorage.setItem("userData",JSON.stringify(data.data[0]));
-                this.props.history.push('/home');
-            }
-                
-
         })
         .catch(function() {
             
         });
+
+    }
+
+    gotoLoginScreen() {
+        this.props.history.push('/');
+
+        // let userData = localStorage.getItem('userData');
     }
 
   
     render() {
         return (
             <Fragment>
-            <AppHeader name="Login"/>
+            <AppHeader name={'Welcome Home - '+this.state.first_name}/>
             <Container component="main" maxWidth="xs">
 
             <ToastContainer position={toast.POSITION.BOTTOM_RIGHT} />
@@ -83,27 +89,51 @@ class Index extends Component {
                     margin="normal"
                     required
                     fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="email"
+                    id="first_name"
+                    label="Firstname"
+                    name="first_name"
                     onChange={this.onChange} 
-                    value={this.state.email}
+                    value={this.state.first_name}
                     autoFocus
                 />
+
                 <TextField
                     variant="outlined"
                     margin="normal"
                     required
                     fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
+                    id="last_name"
+                    label="Lastname"
+                    name="last_name"
                     onChange={this.onChange} 
-                    value={this.state.password}
-                    autoComplete="current-password"
+                    value={this.state.last_name}
                 />
+
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="address"
+                    label="Address"
+                    name="address"
+                    onChange={this.onChange} 
+                    value={this.state.address}
+                />
+
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="mobile"
+                    label="Mobile"
+                    name="mobile"
+                    onChange={this.onChange} 
+                    value={this.state.mobile}
+                />
+
+                
                 {/* <FormControlLabel
                     control={<Checkbox value="remember" color="primary" />}
                     label="Remember me"
@@ -124,8 +154,8 @@ class Index extends Component {
                     </Link>
                     </Grid> */}
                     <Grid item>
-                    <Link onClick={ () => { this.gotoRegisterScreen() }} variant="body2">
-                        {"Don't have an account? Sign Up"}
+                    <Link onClick={ () => { this.gotoLoginScreen() }} variant="body2">
+                        {" Logout "}
                     </Link>
                     </Grid>
                 </Grid>
