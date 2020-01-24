@@ -1,59 +1,126 @@
 import React, { Fragment, Component } from 'react';
-import PropTypes from 'prop-types';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import Link from '@material-ui/core/Link';
+import Grid from '@material-ui/core/Grid';
+import Container from '@material-ui/core/Container';
 import classes from './classes';
 import {withStyles} from '@material-ui/core';
-
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 
 import AppHeader from './../../Components/AppHeader';
 
 class Index extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            email:'',
-            password:''
-        };
-        // this.onChange = this.onChange.bind(this);
-    }
 
     gotoLoginScreen() {
         this.props.history.push('/');
     }
 
+  
     render() {
         return (
             <Fragment>
-                    <AppHeader/>
+            <AppHeader name="Register"/>
+            <Container component="main" maxWidth="xs">
 
-                    <Card className={classes.card}>
-                        <CardContent>
-                            <Typography className={classes.title} color="textSecondary" gutterBottom>
-                                Register
-                            </Typography>
-                            <Typography variant="h5" component="h2">
-                            be
-                            </Typography>
-                            <Typography className={classes.pos} color="textSecondary">
-                            adjective
-                            </Typography>
-                            
-                        </CardContent>
-                        <CardActions>
-                            <Button size="small" onClick={ () => { this.gotoLoginScreen() }}> Goto Register Screen </Button>
-                        </CardActions>
-                    </Card>
+            <CssBaseline />
+            <div className={classes.paper}>
+                <form className={classes.form} noValidate>
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="first_name"
+                    label="Firstname"
+                    name="first_name"
+                    autoFocus
+                />
+
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="last_name"
+                    label="Lastname"
+                    name="last_name"
+                />
+
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="address"
+                    label="Address"
+                    name="address"
+                />
+
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="mobile"
+                    label="Mobile"
+                    name="mobile"
+                />
+
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    autoComplete="email"
+                />
+
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                />
+                {/* <FormControlLabel
+                    control={<Checkbox value="remember" color="primary" />}
+                    label="Remember me"
+                /> */}
+                <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                >
+                    Submit
+                </Button>
+                <Grid container>
+                    {/* <Grid item xs>
+                    <Link href="#" variant="body2">
+                        Forgot password?
+                    </Link>
+                    </Grid> */}
+                    <Grid item>
+                    <Link onClick={ () => { this.gotoLoginScreen() }} variant="body2">
+                        {"Already have account? click here to login"}
+                    </Link>
+                    </Grid>
+                </Grid>
+                </form>
+            </div>
+            
+            </Container>
             </Fragment>
         );
     }
 }
-
-Index.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
 
 export default withStyles(classes)(Index);

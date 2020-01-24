@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { Fragment, Component } from 'react';
+import PropTypes from 'prop-types';
+import {withStyles} from '@material-ui/core';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -17,18 +19,34 @@ const classes = theme => ({
   }
 });
 
+class AppHeader extends Component {
+  constructor(props) {
+    super(props);
 
-function AppHeader() {
-  return (
-    <div className={classes.root}>
-    <AppBar position="static">
-        <Toolbar>
-        <Typography variant="h6" color="inherit" className={classes.grow}>
-            Login
-        </Typography>
-        </Toolbar>
-    </AppBar>
-    </div>
-  );
+    let name = this.props.name ? this.props.name : 'App';
+
+    this.state = {
+      name: name,
+  };
+    
+    console.log(this.props.name);
+  }
+
+  render() {
+
+    return (
+      <div className={classes.root}>
+      <AppBar position="static">
+          <Toolbar>
+          <Typography variant="h6" color="inherit" className={classes.grow}>
+              {this.state.name}
+          </Typography>
+          </Toolbar>
+      </AppBar>
+      </div>
+    )
+  };
+
 }
-export default AppHeader;
+
+export default withStyles(classes)(AppHeader);
