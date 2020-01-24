@@ -35,6 +35,13 @@ class Index extends Component {
 
     handleSubmit(event) {
         event.preventDefault();
+
+
+        if(this.state.email == '' || this.state.password == ''){
+            toast("Please enter the details");
+            return false;
+        }
+
         console.log("submit");
         console.log(this.state);
         let payload = { email : this.state.email, password: this.state.password };
