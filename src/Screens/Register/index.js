@@ -75,7 +75,7 @@ class Index extends Component {
     render() {
         return (
             <Fragment>
-            <AppHeader name={'Welcome Home - '+this.state.first_name}/>
+            <AppHeader name={'Register'}/>
             <Container component="main" maxWidth="xs">
 
             <ToastContainer position={toast.POSITION.BOTTOM_RIGHT} />
