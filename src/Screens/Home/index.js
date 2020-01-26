@@ -98,7 +98,7 @@ class Index extends Component {
         })
         .then(res =>res.json())
         .then(data => {
-            this.setState({picture_url:data.signedUrl,picture_path:data.filePath});
+            this.setState({picture_url:data.signedUrl,picture_path:imagePath});
             console.log(data);
         })
         .catch(function() {
