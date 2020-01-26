@@ -71,11 +71,15 @@ class Index extends Component {
             toast(data.message);
             console.log(data);
 
-            if(payload.picture_url != '') {
+            // if(payload.picture_url != '') {
                 let updateUserData = this.state.userData;
                 updateUserData.picture_url = this.state.picture_path;
+                updateUserData.first_name = this.state.first_name;
+                updateUserData.last_name = this.state.last_name;
+                updateUserData.address = this.state.address;
+                updateUserData.mobile = this.state.mobile;
                 localStorage.setItem('userData',JSON.stringify(updateUserData));
-            }
+            // }
 
             
         })
