@@ -26,11 +26,22 @@ class Index extends Component {
             first_name:userData.first_name,
             last_name:userData.last_name,
             address:userData.address,
-            mobile:userData.mobile
+            mobile:userData.mobile,
+            picture_url:userData.picture_url,
+            picture_path: userData.picture_url,
+            userData: userData
         };
 
         this.onChange = this.onChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.fileChangedHandler = this.fileChangedHandler.bind(this);
+        this.getParseImage = this.getParsedImage.bind(this);
+
+        console.log(userData);
+
+        if(userData.picture_url != null && userData.picture_url != '') {
+            this.getParseImage(userData.picture_url);
+        }
         
         // console.log(userData);
     }
@@ -42,7 +53,7 @@ class Index extends Component {
     handleSubmit(event) {
         event.preventDefault();
 
-        let payload = { id: this.state.id, first_name : this.state.first_name, last_name: this.state.last_name, address: this.state.address, mobile: this.state.mobile };
+        let payload = { picture_url: this.state.picture_path,id: this.state.id, first_name : this.state.first_name, last_name: this.state.last_name, address: this.state.address, mobile: this.state.mobile };
         console.log(payload);
         let url = "https://hy9jdgi255.execute-api.ap-south-1.amazonaws.com/dev/user";
         fetch(url, {
@@ -59,11 +70,69 @@ class Index extends Component {
         .then(data => {
             toast(data.message);
             console.log(data);
+
+            if(payload.picture_url != '') {
+                let updateUserData = this.state.userData;
+                updateUserData.picture_url = this.state.picture_path;
+                localStorage.setItem('userData',JSON.stringify(updateUserData));
+            }
+
+            
         })
         .catch(function() {
             
         });
 
+    }
+
+    getParsedImage(imagePath)
+    {
+        let url = "https://6l9yk6hl78.execute-api.ap-south-1.amazonaws.com/dev/image-upload?name="+imagePath;
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'content-type': 'application/json',
+                'accept': 'application/json',
+                'Access-Control-Allow-Origin' : '*'
+            }
+        })
+        .then(res =>res.json())
+        .then(data => {
+            this.setState({picture_url:data.signedUrl,picture_path:data.filePath});
+            console.log(data);
+        })
+        .catch(function() {
+            
+        });
+    }
+
+    fileChangedHandler(e) {
+        let file = e.target.files[0];
+        // console.log(file);
+        // this.setState({ profile_image: e.target.files[0] });
+
+        var payload = new FormData();
+
+        payload.append("file",e.target.files[0]);
+        let url = "https://6l9yk6hl78.execute-api.ap-south-1.amazonaws.com/dev/image-upload";
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Access-Control-Allow-Origin' : '*'
+            },
+            body: payload
+        })
+        .then(res =>res.json())
+        .then(data => {
+            this.setState({picture_url:data.signedUrl,picture_path:data.filePath});
+            console.log(data);
+        })
+        .catch(function() {
+            
+        });
+
+
+        
     }
 
     gotoLoginScreen() {
@@ -133,6 +202,10 @@ class Index extends Component {
                     value={this.state.mobile}
                 />
 
+
+                <img src={ this.state.picture_url } style={{width:"50%"}} />
+
+                <input type="file" name="profile_image" onChange={this.fileChangedHandler} />
                 
                 {/* <FormControlLabel
                     control={<Checkbox value="remember" color="primary" />}

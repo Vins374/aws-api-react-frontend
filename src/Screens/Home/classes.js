@@ -17,6 +17,9 @@
     submit: {
       margin: theme.spacing(3, 0, 2),
     },
+    width200: {
+      width: '200px'
+    }
     });
   
     export default classes;
